@@ -1,6 +1,13 @@
 # 🎓 Student Freelancer Workplace
 
 A full-stack web application that connects student freelancers with potential clients, allowing them to showcase their skills, build portfolios, and find opportunities while pursuing their education.
+<img width="1913" height="978" alt="image" src="https://github.com/user-attachments/assets/961d6b85-dced-4145-9b78-69a52dac8748" />
+<img width="1919" height="974" alt="image" src="https://github.com/user-attachments/assets/6a4eefba-1701-4d61-8785-36d2cddea04e" />
+<img width="1918" height="974" alt="image" src="https://github.com/user-attachments/assets/78e3744e-e96d-49a5-a383-7b1504260869" />
+<img width="1917" height="967" alt="image" src="https://github.com/user-attachments/assets/053369e9-7636-462c-a29a-3f6ad14b2a7f" />
+
+
+
 
 ## ✨ Features
 
