@@ -5,13 +5,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-// Validation middleware
 const validateLogin = [
     body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email address'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
 ];
 
-// Helper function to handle validation errors
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -24,7 +22,6 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-// Generate JWT token
 const generateToken = (userId, email) => {
     return jwt.sign(
         { userId, email },
@@ -33,12 +30,10 @@ const generateToken = (userId, email) => {
     );
 };
 
-// 1. User Login
 router.post('/login', validateLogin, handleValidationErrors, async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check if user exists
         const [users] = await pool.execute(
             'SELECT * FROM users WHERE email = ?',
             [email]
@@ -53,11 +48,6 @@ router.post('/login', validateLogin, handleValidationErrors, async (req, res) =>
 
         const user = users[0];
 
-        // For now, we'll use a simple check since we don't have password in our current schema
-        // In a real application, you would hash passwords and verify them
-        // For demo purposes, we'll check if the user exists and return success
-        
-        // Generate JWT token
         const token = generateToken(user.id, user.email);
 
         res.json({
@@ -89,7 +79,6 @@ router.post('/login', validateLogin, handleValidationErrors, async (req, res) =>
     }
 });
 
-// 2. Verify JWT Token (Middleware)
 const verifyToken = (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -112,7 +101,6 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-// 3. Get current user profile (Protected route)
 router.get('/profile', verifyToken, async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -160,13 +148,11 @@ router.get('/profile', verifyToken, async (req, res) => {
     }
 });
 
-// 4. Update current user profile (Protected route)
 router.put('/profile', verifyToken, async (req, res) => {
     try {
         const userId = req.user.userId;
         const { name, phone, skills, bio, hourly_rate } = req.body;
 
-        // Check if user exists
         const [existingUsers] = await pool.execute(
             'SELECT * FROM users WHERE id = ?',
             [userId]
@@ -179,7 +165,6 @@ router.put('/profile', verifyToken, async (req, res) => {
             });
         }
 
-        // Update user profile (excluding email for security)
         const [result] = await pool.execute(
             `UPDATE users 
              SET name = ?, phone = ?, skills = ?, bio = ?, 
@@ -195,7 +180,6 @@ router.put('/profile', verifyToken, async (req, res) => {
             });
         }
 
-        // Get updated user
         const [updatedUsers] = await pool.execute(
             'SELECT * FROM users WHERE id = ?',
             [userId]
@@ -232,7 +216,6 @@ router.put('/profile', verifyToken, async (req, res) => {
     }
 });
 
-// 5. Logout (Client-side token removal)
 router.post('/logout', (req, res) => {
     res.json({
         success: true,
@@ -240,7 +223,6 @@ router.post('/logout', (req, res) => {
     });
 });
 
-// Export middleware for use in other routes
 module.exports = {
     router,
     verifyToken
