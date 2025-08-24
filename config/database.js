@@ -15,10 +15,8 @@ const dbConfig = {
     reconnect: true
 };
 
-// Create connection pool
 const pool = mysql.createPool(dbConfig);
 
-// Test database connection
 const testConnection = async () => {
     try {
         const connection = await pool.getConnection();
@@ -31,12 +29,10 @@ const testConnection = async () => {
     }
 };
 
-// Initialize database tables
 const initDatabase = async () => {
     try {
         const connection = await pool.getConnection();
         
-        // Create users table
         const createUsersTable = `
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
