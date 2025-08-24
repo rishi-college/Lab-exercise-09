@@ -1,14 +1,9 @@
--- Student Freelancer Workplace Database Initialization
--- This script creates the database and tables needed for the application
 
--- Create database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS student_freelancer_db;
 USE student_freelancer_db;
 
--- Drop existing tables if they exist (for clean setup)
 DROP TABLE IF EXISTS users;
 
--- Create users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -23,14 +18,12 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
-    -- Add indexes for better performance
     INDEX idx_email (email),
     INDEX idx_skills (skills(100)),
     INDEX idx_created_at (created_at),
     INDEX idx_hourly_rate (hourly_rate)
 );
 
--- Insert sample data for testing
 INSERT INTO users (name, email, phone, skills, bio, hourly_rate, is_verified) VALUES
 ('Sarah Johnson', 'sarah.johnson@email.com', '+1-555-0101', 'Web Development, React, Node.js, MongoDB', 'Passionate full-stack developer with 2 years of experience. Specialized in modern web technologies and responsive design. Love creating user-friendly applications that solve real problems.', 35.00, TRUE),
 ('Michael Chen', 'michael.chen@email.com', '+1-555-0102', 'Graphic Design, Adobe Creative Suite, Logo Design, Branding', 'Creative graphic designer with a keen eye for detail. Experienced in creating compelling visual identities and marketing materials. Always eager to bring ideas to life through design.', 28.50, TRUE),
@@ -43,8 +36,6 @@ INSERT INTO users (name, email, phone, skills, bio, hourly_rate, is_verified) VA
 ('Rachel Green', 'rachel.green@email.com', '+1-555-0109', 'Photography, Photo Editing, Lightroom, Portrait Photography', 'Professional photographer with expertise in portrait and commercial photography. Skilled in photo editing and post-processing. Passionate about capturing authentic moments and creating stunning visuals.', 45.00, TRUE),
 ('Kevin Patel', 'kevin.patel@email.com', '+1-555-0110', '3D Modeling, Blender, Unity, Game Development', '3D artist and game developer with experience in creating immersive 3D environments and characters. Skilled in Blender, Unity, and game development pipelines.', 42.00, TRUE);
 
--- Create additional tables for future features (optional)
--- Projects table for future project management
 CREATE TABLE IF NOT EXISTS projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -62,7 +53,6 @@ CREATE TABLE IF NOT EXISTS projects (
     INDEX idx_freelancer_id (freelancer_id)
 );
 
--- Skills table for better skill management
 CREATE TABLE IF NOT EXISTS skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
@@ -70,7 +60,6 @@ CREATE TABLE IF NOT EXISTS skills (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert common skills
 INSERT INTO skills (name, category) VALUES
 ('Web Development', 'Development'),
 ('Mobile Development', 'Development'),
@@ -100,7 +89,6 @@ INSERT INTO skills (name, category) VALUES
 ('Blender', '3D Tools'),
 ('Unity', 'Game Development');
 
--- User Skills junction table
 CREATE TABLE IF NOT EXISTS user_skills (
     user_id INT,
     skill_id INT,
@@ -113,7 +101,6 @@ CREATE TABLE IF NOT EXISTS user_skills (
     FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE CASCADE
 );
 
--- Insert some user skills relationships
 INSERT INTO user_skills (user_id, skill_id, proficiency_level, years_experience) VALUES
 (1, 1, 'advanced', 2), -- Sarah - Web Development
 (1, 17, 'advanced', 2), -- Sarah - JavaScript
@@ -140,7 +127,6 @@ INSERT INTO user_skills (user_id, skill_id, proficiency_level, years_experience)
 (10, 10, 'advanced', 2), -- Kevin - 3D Modeling
 (10, 25, 'intermediate', 1); -- Kevin - Blender
 
--- Show the created data
 SELECT 'Database initialized successfully!' as status;
 SELECT COUNT(*) as total_users FROM users;
 SELECT COUNT(*) as total_skills FROM skills;
